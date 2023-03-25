@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
+import { Button } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,27 +11,30 @@ import styles from '../../style/mainStyle';
 
 function Feed() {
   return (
-    <View style={styles.container}>
-    <Button 
+    <View style={specificStyle.container}>
+    <Button buttonStyle={specificStyle.button}
       title="Polícia" 
-      type="outline"
       onPress={() => alert("190")} 
     />
-    <Button
+    <Button buttonStyle={specificStyle.button}
       title="Ambulancia" 
-      type="outline"
       onPress={() => alert("192")} 
-
     />
-    <Button
+    <Button buttonStyle={specificStyle.button}
       title="Bombeiro" 
-      type="outline"
       onPress={() => alert("193")} 
     />
-    <Button     
-      title="Pizza" 
-      type="outline"
-      onPress={() => alert("ainda não sei")} 
+    <Button buttonStyle={specificStyle.button}
+      title="Polícia Civil" 
+      onPress={() => alert("197")} 
+    />
+    <Button buttonStyle={specificStyle.button}
+      title="Delegacia da mulher" 
+      onPress={() => alert("180")} 
+    />
+    <Button buttonStyle={specificStyle.button}
+      title="Prevenção ao Suícidio" 
+      onPress={() => alert("188")} 
     />
     </View>
   );
@@ -39,8 +43,11 @@ function Feed() {
 
 function Profile() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Profile!</Text>
+    <View style={{ alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center', gap: 10}}>
+      <Text style={{fontSize: 25, marginBottom: 120, marginTop: 30}}>Dados Pessoais:</Text>
+      <Text style={{fontSize: 18}}>Nome: Lucas Boareto</Text>
+      <Text style={{fontSize: 18}}>Endereço: Rua Força Publica 89</Text>
+      <Text style={{fontSize: 18}}>E-mail: 240872021@eniac.edu.br</Text>
     </View>
   );
 }
@@ -60,8 +67,9 @@ export default function Principal () {
         name="Feed"
         component={Feed}
         options={{
+          headerTitleAlign: 'center',
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size, }) => (
+          tabBarIcon: ({ color , size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
         }}
@@ -70,6 +78,7 @@ export default function Principal () {
         name="Perfil"
         component={Profile}
         options={{
+          headerTitleAlign: 'center',
           tabBarLabel: 'Perfil',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
@@ -80,4 +89,22 @@ export default function Principal () {
   );
 }
 
-
+const specificStyle = StyleSheet.create({
+  container:{
+    backgroundColor: '#F9F5EB',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: '30%',
+    marginLeft: 10,
+    marginRight: 10,
+    width: 'auto',
+    gap: 15,
+    justifyContent: 'space-around' 
+  },
+  button:{
+    backgroundColor: '#C52E28',
+    width: 150,
+    padding: 15,
+    height: 100
+  }
+})

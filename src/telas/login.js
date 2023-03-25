@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import { Text, Input, Button } from 'react-native-elements';
 import styles from '../../style/mainStyle';
 import { StyleSheet } from 'react-native';
-import Cadastro from './Cadastro';
 
 
 
