@@ -3,14 +3,26 @@ import { View, Text } from "react-native";
 import { Button, Icon, Input } from "react-native-elements";
 import { StyleSheet } from 'react-native';
 import styles from '../../style/mainStyle';
+import { cadastrar } from "../requisicoesFirebase";
 
 
 export default function Cadastro ({navigation}){
 
-const [nome, setNome] = useState(null)
-const [endereco, setEndereco] = useState(null)
-const [email, setEmail] = useState(null)
-const [senha, setPassword] = useState(null)
+const [nome, setNome] = useState('')
+const [endereco, setEndereco] = useState('')
+const [email, setEmail] = useState('')
+const [senha, setPassword] = useState('')
+
+async function realizarCadastro(){
+    await cadastrar(email, senha)
+    if (validar()){
+        navigation.reset({
+            index: 0,
+            routes: [{name: "Principal"}]
+        })
+    }   
+}
+
 
 const [errorNome, setErrorNome] = useState(null)
 const [errorEndereço, setErrorEndereco] = useState(null)
@@ -44,15 +56,6 @@ const validar = () => {
 }
     
 
-
-const salvar = () => {
-    if (validar()){
-        navigation.reset({
-            index: 0,
-            routes: [{name: "Principal"}]
-        })
-    }    
-}
 
     return(
       <View style={styles.container}>
@@ -100,7 +103,7 @@ const salvar = () => {
             }
             title="Salvar"  
             buttonStyle={specificStyle.button}
-            onPress={() => salvar()}
+            onPress={() => realizarCadastro()}
         />
       </View>
     );

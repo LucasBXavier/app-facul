@@ -4,19 +4,36 @@ import { View } from 'react-native';
 import { Text, Input, Button } from 'react-native-elements';
 import styles from '../../style/mainStyle';
 import { StyleSheet } from 'react-native';
+import { logar } from '../requisicoesFirebase';
 
 
 
 export default function Login({navigation}) {
 
-  const [email, setEmail] = useState(null)
-  const [password, setPassword] = useState(null)
-  const entrar = () => {
-    navigation.reset({
-        index: 0,
-        routes: [{name: "Principal"}]
-    })
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [statusError, setStatusError] = useState('');
+  const [mensagemError, setMensagemError] = useState('');
+
+  async function realizarLogin(){
+    if(email == ''){
+      setMensagemError('O email é obrigatório!');
+      setStatusError('email');
+    } else if(password == ''){
+      setMensagemError('A senha é obrigatória!');
+      setStatusError('senha');
+    } else {
+      const resultado = await logar(email, password);
+      if(resultado == 'erro'){
+        setStatusError('firebase')
+        setMensagemError('Email ou senha não conferem')
+      } 
+      else {
+        navigation.navigate('Principal')
+      }
     }
+  }
+
     const cadastrar = () => {
         navigation.navigate("Cadastro")
     }   
@@ -29,6 +46,8 @@ export default function Login({navigation}) {
         placeholder="E-mail"
         leftIcon={{ type: 'font-awesome', name: 'envelope'}}
         onChangeText={value => setEmail(value)}
+        error={statusError == 'email'}
+        messageError={mensagemError}
         keyboardtype="email-address"
       />
       <Input
@@ -36,13 +55,15 @@ export default function Login({navigation}) {
         leftIcon={{ type: 'font-awesome', name: 'lock'}}
         onChangeText={value => setPassword(value)}
         secureTextEntry={true}
+        error={statusError == 'senha'}
+        messageError={mensagemError}
       />
       <Button 
       size={15}
       title="Entrar" 
       type="outline" 
       buttonStyle={specificStyle.button}
-      onPress={() => entrar()}
+      onPress={() => realizarLogin()}
       />
       <Text>Ou</Text>
       <Button 
