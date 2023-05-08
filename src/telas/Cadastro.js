@@ -4,57 +4,41 @@ import { Button, Icon, Input } from "react-native-elements";
 import { StyleSheet } from 'react-native';
 import styles from '../../style/mainStyle';
 import { cadastrar } from "../requisicoesFirebase";
+import { Alerta } from "./Alerta";
 
 
 export default function Cadastro ({navigation}){
 
 const [nome, setNome] = useState('')
-const [endereco, setEndereco] = useState('')
 const [email, setEmail] = useState('')
 const [senha, setPassword] = useState('')
 
 async function realizarCadastro(){
-    await cadastrar(email, senha)
-    if (validar()){
-        navigation.reset({
-            index: 0,
-            routes: [{name: "Principal"}]
-        })
-    }   
-}
+    if(email == ''){
+        setMensagemError('Preencha com seu email');
+        setStatusError('email');
+      } else if(senha == ''){
+        setMensagemError('Digite sua senha');
+        setStatusError('senha');
+      } else {
+        const resultado = await cadastrar(email, senha);
+        setStatusError('firebase')
+        if(resultado == 'sucesso') {
+          setMensagemError('Usuário criado com sucesso!')
+          setEmail('')
+          setPassword('')
+        }
+        else {
+          setMensagemError(resultado)
+        }
+      }
+    }
 
 
-const [errorNome, setErrorNome] = useState(null)
-const [errorEndereço, setErrorEndereco] = useState(null)
-const [errorEmail, setErrorEmail] = useState(null)
-const [errorSenha, setErrorPassword] = useState(null)
 
-const validar = () => {
-      
-    let error = false
-    setErrorNome(null)
-    setErrorEndereco(null)
-    setErrorEmail(null)
-    setErrorPassword(null)
-    if(nome == null){
-        setErrorNome("Preencha o seu nome corretamente")
-        return false 
-    }
-    if(endereco == null){
-        setErrorEndereco("Prencha com seu endereço corretamente")
-        return false
-    }
-    if(email == null){
-        setErrorEmail("Prencha com seu E-mail corretamente")
-        return false
-    }
-    if(senha == null){
-        setErrorPassword("Prencha com uma senha de acesso")
-        return false
-    }
-    return !error
-}
-    
+
+const [statusError, setStatusError] = useState('');
+const [mensagemError, setMensagemError] = useState('');
 
 
     return(
@@ -64,36 +48,33 @@ const validar = () => {
             placeholder="Nome"
             onChangeText={value => {
                 setNome(value)
-                setErrorNome(null)  
             }}
-            errorMessage={errorNome}
-        />
-        <Input
-            placeholder="Endereço"
-            onChangeText={value => {
-                setEndereco(value)
-                setErrorEndereco(null)
-            }}
-            errorMessage={errorEndereço}
         />
         <Input
             placeholder="E-mail"
             onChangeText={value => {
                 setEmail(value)
-                setErrorEmail(null)
             }}
             keyboardtype="email-address"
-            errorMessage={errorEmail}
+            error={statusError == 'email'}
+            messageError={mensagemError}
         />
         <Input
             placeholder="Senha"
             onChangeText={value => {
                 setPassword(value)
-                setErrorPassword(null)
             }}
             secureTextEntry={true}
-            errorMessage={errorSenha}
+            error={statusError == 'senha'}
+            messageError={mensagemError}
         />
+
+        <Alerta 
+            mensagem={mensagemError}
+            error={statusError == 'firebase'}
+            setError={setStatusError}
+        />
+
         <Button 
             icon={
             <Icon
@@ -108,6 +89,8 @@ const validar = () => {
       </View>
     );
 }
+
+
 
 const specificStyle = StyleSheet.create ({
     button:{

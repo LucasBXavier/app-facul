@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
-import styles from '../../style/mainStyle';
+import { Linking } from 'react-native';
 
 
 
@@ -14,27 +14,27 @@ function Feed() {
     <View style={specificStyle.container}>
     <Button buttonStyle={specificStyle.button}
       title="Polícia" 
-      onPress={() => alert("190")} 
+      onPress={() => Linking.openURL('tel:190')} 
     />
     <Button buttonStyle={specificStyle.button}
       title="Ambulancia" 
-      onPress={() => alert("192")} 
+      onPress={() => Linking.openURL('tel:192')} 
     />
     <Button buttonStyle={specificStyle.button}
       title="Bombeiro" 
-      onPress={() => alert("193")} 
+      onPress={() => Linking.openURL('tel:193')} 
     />
     <Button buttonStyle={specificStyle.button}
       title="Polícia Civil" 
-      onPress={() => alert("197")} 
+      onPress={() => Linking.openURL('tel:197')} 
     />
     <Button buttonStyle={specificStyle.button}
       title="Delegacia da mulher" 
-      onPress={() => alert("180")} 
+      onPress={() => Linking.openURL('tel:180')} 
     />
     <Button buttonStyle={specificStyle.button}
       title="Prevenção ao Suícidio" 
-      onPress={() => alert("188")} 
+      onPress={() => Linking.openURL('tel:188')} 
     />
     </View>
   );

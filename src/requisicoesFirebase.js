@@ -2,6 +2,7 @@ import { auth } from "../config/firebase";
 import { 
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword,
+    AuthErrorCodes
 } from "firebase/auth";
 
 

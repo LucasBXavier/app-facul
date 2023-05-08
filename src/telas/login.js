@@ -5,6 +5,7 @@ import { Text, Input, Button } from 'react-native-elements';
 import styles from '../../style/mainStyle';
 import { StyleSheet } from 'react-native';
 import { logar } from '../requisicoesFirebase';
+import { Alerta } from './Alerta';
 
 
 
@@ -46,9 +47,10 @@ export default function Login({navigation}) {
         placeholder="E-mail"
         leftIcon={{ type: 'font-awesome', name: 'envelope'}}
         onChangeText={value => setEmail(value)}
+        keyboardtype="email-address"
         error={statusError == 'email'}
         messageError={mensagemError}
-        keyboardtype="email-address"
+        
       />
       <Input
         placeholder="Senha"
@@ -57,6 +59,11 @@ export default function Login({navigation}) {
         secureTextEntry={true}
         error={statusError == 'senha'}
         messageError={mensagemError}
+      />
+      <Alerta 
+        mensagem={mensagemError}
+        error={statusError == 'firebase'}
+        setError={setStatusError}
       />
       <Button 
       size={15}
@@ -77,6 +84,8 @@ export default function Login({navigation}) {
     </View>
   );
 }
+
+
 
 const specificStyle = StyleSheet.create ({
     button:{
