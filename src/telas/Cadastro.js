@@ -5,11 +5,14 @@ import { StyleSheet } from 'react-native';
 import styles from '../../style/mainStyle';
 import { cadastrar } from "../requisicoesFirebase";
 import { Alerta } from "./Alerta";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 export default function Cadastro ({navigation}){
 
 const [nome, setNome] = useState('')
+const [endereco, setEndereco] = useState('')
 const [email, setEmail] = useState('')
 const [senha, setPassword] = useState('')
 
@@ -27,10 +30,16 @@ async function realizarCadastro(){
           setMensagemError('Usuário criado com sucesso!')
           setEmail('')
           setPassword('')
-        }
-        else {
+        } else {
           setMensagemError(resultado)
         }
+        try {
+          await AsyncStorage.setItem('nome', nome);
+          await AsyncStorage.setItem('endereco', endereco);
+        } catch {
+          console.log('Erro ao salvar os dados no Async Storage:');
+        }
+        
       }
     }
 
@@ -48,6 +57,12 @@ const [mensagemError, setMensagemError] = useState('');
             placeholder="Nome"
             onChangeText={value => {
                 setNome(value)
+            }}
+        />
+        <Input
+            placeholder="Endereço"
+            onChangeText={value =>{
+              setEndereco(value)
             }}
         />
         <Input

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -6,6 +6,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 import { Linking } from 'react-native';
+import { auth } from '../../config/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 
 
@@ -42,12 +46,36 @@ function Feed() {
 
 
 function Profile() {
+  const [nome, setNome] = useState('');
+  const [endereco, setEndereco] = useState('');
+  
+  useEffect(() => {
+    // Função assíncrona para recuperar os dados de nome e endereço do Async Storage
+    const getDados = async () => {
+      try {
+        const nomeSalvo = await AsyncStorage.getItem('nome');
+        const enderecoSalvo = await AsyncStorage.getItem('endereco');
+        if (nomeSalvo && enderecoSalvo) {
+          setNome(nomeSalvo);
+          setEndereco(enderecoSalvo);
+        }
+      } catch (error) {
+        console.log('Erro ao obter os dados do Async Storage:', error);
+      }
+    };
+
+    // Chama a função para obter os dados
+    getDados();
+  }, []);
+
+  const usuario = auth.currentUser;
   return (
     <View style={{ alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center', gap: 10}}>
       <Text style={{fontSize: 25, marginBottom: 120, marginTop: 30}}>Dados Pessoais:</Text>
-      <Text style={{fontSize: 18}}>Nome: Lucas Boareto</Text>
-      <Text style={{fontSize: 18}}>Endereço: Rua Força Publica 89</Text>
-      <Text style={{fontSize: 18}}>E-mail: 240872021@eniac.edu.br</Text>
+      <Text style={{fontSize: 20}}>Usuário: {usuario.email}</Text>
+      <Text style={{fontSize: 20}}>Nome: {nome}</Text>
+      <Text style={{fontSize: 20}}>Endereço: {endereco}</Text>
+
     </View>
   );
 }

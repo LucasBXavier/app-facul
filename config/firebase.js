@@ -9,6 +9,7 @@ import {
     MESSAGING_SENDER_ID,
     APP_ID,
  } from "@env"
+ import { getFirestore } from 'firebase/firestore'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -27,4 +28,6 @@ const auth = initializeAuth(app, {
     persistence: getReactNativePersistence(AsyncStorage)
 })
 
-export { auth };
+const db = getFirestore(app);
+
+export { auth, db };
