@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NavigationContainer } from '@react-navigation/native';
+import { navigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 import { Linking } from 'react-native';
@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 function Feed() {
   return (
     <View style={specificStyle.container}>
+
     <Button buttonStyle={specificStyle.button}
       title="Polícia" 
       onPress={() => Linking.openURL('tel:190')} 
@@ -45,9 +46,10 @@ function Feed() {
 }
 
 
-function Profile() {
+function Profile({navigation}) {
   const [nome, setNome] = useState('');
   const [endereco, setEndereco] = useState('');
+  const [sangue, setSangue] = useState('');
   
   useEffect(() => {
     // Função assíncrona para recuperar os dados de nome e endereço do Async Storage
@@ -55,9 +57,11 @@ function Profile() {
       try {
         const nomeSalvo = await AsyncStorage.getItem('nome');
         const enderecoSalvo = await AsyncStorage.getItem('endereco');
-        if (nomeSalvo && enderecoSalvo) {
+        const sangueSalvo = await AsyncStorage.getItem('sangue')
+        if (nomeSalvo && enderecoSalvo && sangueSalvo) {
           setNome(nomeSalvo);
           setEndereco(enderecoSalvo);
+          setSangue(sangueSalvo);
         }
       } catch (error) {
         console.log('Erro ao obter os dados do Async Storage:', error);
@@ -69,13 +73,24 @@ function Profile() {
   }, []);
 
   const usuario = auth.currentUser;
+
+  const logout = (navigation) => {
+    navigation.navigate('Login')
+  }
+  
+
   return (
-    <View style={{ alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center', gap: 10}}>
+    <View style={{ alignSelf: 'stretch', alignItems: 'center', gap: 5}}>
       <Text style={{fontSize: 25, marginBottom: 120, marginTop: 30}}>Dados Pessoais:</Text>
       <Text style={{fontSize: 20}}>Usuário: {usuario.email}</Text>
       <Text style={{fontSize: 20}}>Nome: {nome}</Text>
       <Text style={{fontSize: 20}}>Endereço: {endereco}</Text>
-
+      <Text style={{fontSize: 20}}>Tipo Sanguineo: {sangue}</Text>
+      <Button 
+      title="Sair"  
+      buttonStyle={specificStyle.button2}
+      onPress={() => logout(navigation)}
+      />
     </View>
   );
 }
@@ -92,7 +107,7 @@ export default function Principal () {
       }}
     >
       <Tab.Screen
-        name="Feed"
+        name="Projeto SOS"
         component={Feed}
         options={{
           headerTitleAlign: 'center',
@@ -114,6 +129,8 @@ export default function Principal () {
         }}
       />
     </Tab.Navigator>
+    
+    
   );
 }
 
@@ -122,7 +139,7 @@ const specificStyle = StyleSheet.create({
     backgroundColor: '#F9F5EB',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: '30%',
+    marginTop: '50%',
     marginLeft: 10,
     marginRight: 10,
     width: 'auto',
@@ -134,5 +151,15 @@ const specificStyle = StyleSheet.create({
     width: 150,
     padding: 15,
     height: 100
-  }
+  },
+    button2:{
+        backgroundColor: '#C52E28',
+        width: 140,
+        padding: 10,
+        margin:20,
+        height: 50,
+        marginTop: '80%',
+        
+    },
 })
+

@@ -6,6 +6,9 @@ import styles from '../../style/mainStyle';
 import { cadastrar } from "../requisicoesFirebase";
 import { Alerta } from "./Alerta";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import   db  from '../../config/firestore';
+
+
 
 
 
@@ -13,6 +16,7 @@ export default function Cadastro ({navigation}){
 
 const [nome, setNome] = useState('')
 const [endereco, setEndereco] = useState('')
+const [sangue, setSangue] = useState('')
 const [email, setEmail] = useState('')
 const [senha, setPassword] = useState('')
 
@@ -33,15 +37,18 @@ async function realizarCadastro(){
         } else {
           setMensagemError(resultado)
         }
-        try {
-          await AsyncStorage.setItem('nome', nome);
-          await AsyncStorage.setItem('endereco', endereco);
-        } catch {
-          console.log('Erro ao salvar os dados no Async Storage:');
+          // Salve os dados adicionais no AsyncStorage
+          try {
+            await AsyncStorage.setItem('nome', nome);
+            await AsyncStorage.setItem('endereco', endereco);
+            await AsyncStorage.setItem('sangue', sangue);
+            } catch (error) {
+              console.log('Erro ao salvar os dados:', error);
+            }
+          }
         }
         
-      }
-    }
+      
 
 
 
@@ -63,6 +70,12 @@ const [mensagemError, setMensagemError] = useState('');
             placeholder="Endereço"
             onChangeText={value =>{
               setEndereco(value)
+            }}
+        />
+        <Input
+            placeholder="Tipo sanguineo"
+            onChangeText={value =>{
+              setSangue(value)
             }}
         />
         <Input
